@@ -1,14 +1,36 @@
 /* 
- * File:   scannet.c
- * Author: austeclino
- *
- */
+    O SCANNET visa simplificar a utilização do método PSN (Protein Similarity Networks)
+	a partir da unificação dos seus passos.
+	
+    Copyright (C) 2015 Austeclino
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
 #include <time.h>
+#ifdef WINDOWS
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+#endif
 
 // Permitindo a sua declaração como um tipo qualquer:
 typedef struct CN{
@@ -68,11 +90,10 @@ void plotGraphic();
 double getTime();
 complexNetwork createNetworkTeste();
 // Global vars
-// Criando a enumeração:
 enum boolean {
     true = 1, false = 0
 };
-// Permitindo a sua declaração como um tipo qualquer:
+// Permitindo a sua declaracao como um tipo qualquer:
 typedef enum boolean bool;
 
 int sizeSimilarityMatrix = 1;
@@ -108,34 +129,31 @@ FILE *arqLog;
 
 int main(int argc, char** argv) {
         complexNetwork betterNetwork;
-        showtime("Inicio da execucao");
         
-         printf("\n\n Informe a quantidade de vertices da rede analisada:  ");
+         printf("\n\n Enter the number of vertices of the network analyzed:  ");
          scanf("%d", &sizeSimilarityMatrix);
 
-        // -------------- PARAMETROS DE CONFIGURAÇÃO ---------------
-       //  printf("\n\n Informe o diret�rio onde se encontra o arquivo: (Ex: C:/Users/Leitura)  ");
-      //   scanf("%s", current_path_entrada);
-
-         strcpy(current_path_entrada,"C:/Users/Austeclino/Desktop/Mestrado/leitura/");
+       // -------------- PARAMETROS DE CONFIGURACAO ---------------
+        getcwd(current_path_entrada, 255);
+        strcat(current_path_entrada, "\\");
         // ---------------------------------------------------------
         
         similarityMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);
         loadSimilarityMatrix("resultBlast.txt", similarityMatrix);   
         start_t_TOTAL = getTime();
       	start_t_RC = getTime();      
-        //      ---------------- CRIAÇÃO DAS REDES COMPLEXAS ---------------------------
+        //      ---------------- CRIACAO DAS REDES COMPLEXAS ---------------------------
         createComplexNetworks();
         end_t_RC = getTime();
         tempo_total_RC = end_t_RC - start_t_RC;
 
-        //      ---------------- SELEÇÃO DA REDE CR�?TICA -------------------------------
+        //      ---------------- SELECAO DA REDE CRÍTICA -------------------------------
         
         start_t_Distancia = getTime();
         betterNetwork = SelectBetterNetworkToFindCommunities();
         end_t_Distancia = getTime();
         tempo_total_Distancia = end_t_Distancia - start_t_Distancia;
-        printf("\n Quantidade Total de Arestas: %d", betterNetwork.qtdOfEdges);
+        printf("\n Number of edges: %d \n", betterNetwork.qtdOfEdges);
         
         //      ---------------- PREPARAÇÃO DO NGA -------------------------------
         betterNetwork.colorsMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);      
@@ -152,10 +170,10 @@ int main(int argc, char** argv) {
         }
         copyMatrix(betterNetwork.neighborhoodMatrix, betterNetwork.colorsMatrix);
 
-        //      ---------------- EXECUÇÃO DO NGA -------------------------------
+        //      ---------------- EXECUCAO DO NGA -------------------------------
         executeNga(betterNetwork);
-        //      ---------------- GERAÇÃO DAS SA�?DAS -------------------------------
-  	end_t_TOTAL = getTime();
+        //      ---------------- GERACAO DAS SAIDAS -------------------------------
+		end_t_TOTAL = getTime();
         tempo_total_TOTAL = end_t_TOTAL - start_t_TOTAL;
         
         for (i = 0; i < sizeSimilarityMatrix; i++){ 
@@ -169,7 +187,7 @@ int main(int argc, char** argv) {
         saveMatrizInFile(betterNetwork.dendrogramMatrix, "mDendrogram.dat",betterNetwork.qtdOfEdges+2, sizeSimilarityMatrix);
         saveMatrizInFileFloat(betterNetwork.dendrogramGraphic, "mDendrogramGraphic.dat",qtdDendrogramLines+2, sizeSimilarityMatrix+1);
   
-        showtime("Fim da execucao");  
+        showtime("End of execution");  
         free(similarityMatrix);
         free(complexNetworks);
         
@@ -177,22 +195,21 @@ int main(int argc, char** argv) {
         strcpy(path,current_path_entrada);
         strcat(path,"logexec.txt");
         FILE *arqLog = fopen(path, "wt");
-        fprintf(arqLog,"\n\n ------- Resumo dos tempos de execucao(ms) --------- \n");
-        fprintf(arqLog,"\n Quantidade de Arestas: %d", betterNetwork.qtdOfEdges);
-        fprintf(arqLog,"\n Tempo gasto na criacao das 101 redes complexas: %.5lf", tempo_total_RC); 
-        fprintf(arqLog,"\n Tempo gasto na selecao da rede complexa ideal: %.5lf", tempo_total_Distancia); 
-        fprintf(arqLog,"\n A rede ideal selecionada possui %d arestas", betterNetwork.qtdOfEdges);
-        fprintf(arqLog,"\n Tempo gasto na NGA: %.5lf", tempo_total_NGA);
-        fprintf(arqLog,"\n Tempo gasto na execucao da matriz de cores: %.5lf", tempo_total_MC);
-        fprintf(arqLog,"\n Tempo total de execucao: %.5lf \n", tempo_total_TOTAL);
+        fprintf(arqLog,"\n\n ------- Summary execution time (ms) --------- \n");
+        fprintf(arqLog,"\n Number of edges: %d", betterNetwork.qtdOfEdges);
+        fprintf(arqLog,"\n Time spent on the creation of 101 complex networks: %.5lf", tempo_total_RC); 
+        fprintf(arqLog,"\n Time spent in the ideal complex network selection: %.5lf", tempo_total_Distancia); 
+        fprintf(arqLog,"\n The selected optimal network has %d edges", betterNetwork.qtdOfEdges);
+        fprintf(arqLog,"\n Time spent on NGA: %.5lf", tempo_total_NGA);
+        fprintf(arqLog,"\n Time spent in generating the color matrix: %.5lf", tempo_total_MC);
+        fprintf(arqLog,"\n Running time: %.5lf \n", tempo_total_TOTAL);
         fprintf(arqLog,"\n --------------------------------------------------- \n\n\n");
         fclose(arqLog); 
         system("pause"); 
         return 0;
 }
 
-
-// Traz a �ltima coluna(eixo Y) para a primeira coluna, pois o origim considera a primeira 
+// Traz a última coluna(eixo Y) para a primeira coluna, pois o origim considera a primeira 
 // coluna como sendo o eixo Y para plotar o dendrograma. 
 void setupEixoYDendrogram(complexNetwork *complexNetwork, int numberDendrogramLines){         
     int i,j;    
@@ -248,10 +265,10 @@ void showtimeWithParameter(char texto[30], int value){
     struct tm *timeinfo;
     currentTime = time(NULL);
     timeinfo = localtime(&currentTime);
-    printf("\n%s: %d  Hora: %02d:%02d:%02d \n",texto, value, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);   
+    printf("\n%s: %d  Time: %02d:%02d:%02d \n",texto, value, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);   
 }
 
-double getTime(){
+double getTime(){   
     time_t t;
     t = time(NULL);
     return (double)t;
@@ -262,14 +279,14 @@ int** createDynamicMatrix(int sizeLine, int sizeColumn){
     int i;
     
     if(matrix == NULL){
-         printf("\n ERRO NA ALOCAÇÃO DE MEMÓRIA. \n");
+         printf("\n  Error in memory allocation. \n");
          exit(1);
     }
         
     for(i=0; i < sizeLine; i++){
         matrix[i] = calloc(sizeColumn, sizeof(int));
         if(matrix[i] == NULL){
-            printf("\n ERRO NA ALOCAÇÃO DE MEMÓRIA. \n");
+            printf("\n Error in memory allocation. \n");
             exit(1);
         }
     }
@@ -281,7 +298,7 @@ int* createDynamicArray(int size){
     int* matrix = calloc(size, sizeof(int));     
   
     if(matrix == NULL){
-         printf("\n ERRO NA ALOCAÇÃO DE MEMÓRIA. \n");
+         printf("\n Error in memory allocation. \n");
          exit(1);
     }
     
@@ -313,7 +330,7 @@ float** createDynamicMatrixFloat(int sizeLine, int sizeColumn){
     int i;
     
     if(matrix == NULL){
-         printf("\n ERRO NA ALOCAÇÃO DE MEMÓRIA. \n");
+         printf("\n Error in memory allocation. \n");
          exit(1);
     }
     
@@ -321,7 +338,7 @@ float** createDynamicMatrixFloat(int sizeLine, int sizeColumn){
     for(i=0; i < sizeLine; i++){
         matrix[i] = calloc(sizeColumn, sizeof(float));
          if(matrix[i] == NULL){
-            printf("\n ERRO NA ALOCAÇÃO DE MEMÓRIA. \n");
+            printf("\n Error in memory allocation. \n");
             exit(1);
          }
     }
@@ -361,11 +378,11 @@ void loadSimilarityMatrix(char nameOfFile[30], int** matrix){
     char path[1000];
     strcpy(path,current_path_entrada);  
     strcat(path,nameOfFile);
-
+    
     arqBLAST = fopen(path, "rt");
     
     if (arqBLAST == NULL){
-        printf("\n Arquivo de resultados do BLAST Nao pode ser aberto\n");
+        printf("\n\n\n The file with the similarity matrix can not be opened \n");
         exit (EXIT_FAILURE);
     }
 
@@ -403,7 +420,7 @@ void saveMatrizInFile(int** matriz, char nameOfFile[30], int n, int m){
     arqMATRIZ = fopen(path, "wt");
    
     if (arqMATRIZ == NULL){ // Se não conseguiu criar
-        printf("Problemas na criacao do arquivo da matriz de similaridade.\n");
+        printf("\n Problems in the creation of the similarity matrix file.\n");
         exit (EXIT_FAILURE);
     }
 
@@ -414,16 +431,16 @@ void saveMatrizInFile(int** matriz, char nameOfFile[30], int n, int m){
             }else{
                 result = fprintf(arqMATRIZ,"%d  ", matriz[w][k]);
             }
-            if (result == EOF) printf("Erro na gravacao do arquivo\n");
+            if (result == EOF) printf("\n Error in file recording\n");
         }
 
         result = fprintf(arqMATRIZ,"\n");
-        if (result == EOF) printf("Erro na gravacao do arquivo da matriz de similaridade\n");
+        if (result == EOF) printf("\n Error in the recording of the similarity matrix file \n");
     }
 
     fclose(arqMATRIZ);
 
-    printf("\n O arquivo %s foi salvo com sucesso! \n", nameOfFile);
+    printf("\n\n\n The file %s was successfully saved! \n", nameOfFile);
 }
     
 void saveMatrizInFileFloat(float** matriz, char nameOfFile[30], int n, int m){         
@@ -435,23 +452,23 @@ void saveMatrizInFileFloat(float** matriz, char nameOfFile[30], int n, int m){
     arqMATRIZ = fopen(path, "wt");
     
     if (arqMATRIZ == NULL){ // Se não conseguiu criar
-        printf("Problemas na criacao do arquivo da matriz de similaridade.\n");
+        printf("\n Problems in the creation of the similarity matrix file.\n");
         exit (EXIT_FAILURE);
     } 
 
     for (w = 0; w < n; w++){
         for (k = 0; k < m; k++){
             result = fprintf(arqMATRIZ,"%.2f ", matriz[w][k]);
-            if (result == EOF) printf("Erro na gravacao do arquivo\n");
+            if (result == EOF) printf("Error in file recording\n");
         }
 
         result = fprintf(arqMATRIZ,"\n");
-        if (result == EOF) printf("Erro na gravacao do arquivo da matriz de similaridade\n");
+        if (result == EOF) printf("\n Error in the recording of the similarity matrix file\n");
     }
 
     fclose(arqMATRIZ);
 
-    printf("\n O arquivo %s foi salvo com sucesso! \n", nameOfFile);
+    printf("\n\n\n The file %s was successfully saved! \n", nameOfFile);
 }
 
 void saveArrayInFileFloat(float* array, char nameOfFile[30], int size){         
@@ -463,25 +480,25 @@ void saveArrayInFileFloat(float* array, char nameOfFile[30], int size){
     arqMATRIZ = fopen(path, "wt");
    
     if (arqMATRIZ == NULL){ // Se não conseguiu criar
-        printf("Problemas na criacao do arquivo de dist�ncias\n");
+        printf("\n Problems in the creation of the distances file \n");
         exit (EXIT_FAILURE);
     }
 
     for (w = 0; w < size; w++){
         result = fprintf(arqMATRIZ,"%.2f", array[w]);
         result = fprintf(arqMATRIZ,"\n");
-        if (result == EOF) printf("Erro na gravacao do arquivo\n");
+        if (result == EOF) printf("\n Error in file recording\n");
     }
 
     fclose(arqMATRIZ);
 
-    printf("\n O arquivo %s foi salvo com sucesso! \n", nameOfFile);
+    printf("\n\n\n The file %s was successfully saved! \n", nameOfFile);
 }
 
 void createComplexNetworks(){
     complexNetworks = (complexNetwork *)malloc(101 * sizeof(complexNetwork));
     if(complexNetworks == NULL){
-         printf("\n ERRO NA ALOCAÇÃO DE MEMÓRIA. \n");
+         printf("\n Error in memory allocation. \n");
          exit(1);
     }
 
@@ -567,10 +584,10 @@ complexNetwork SelectBetterNetworkToFindCommunities(){
       complexNetwork betterNetwork;
       float distances[101];
       int i_distance = 0;
-      // ESSE TRECHO DEVE SER DESCOMENTADO CASO QUEIRA SE FAZER UMA AN�LISE DA REDE CR�?TICA    
+      // ESSE TRECHO DEVE SER DESCOMENTADO CASO QUEIRA SE FAZER UMA ANÁLISE DA REDE CRÍTICA    
       for (i = 0; i < (NCutPoints-1); i++){ 
           distance =  calculateDistance(complexNetworks[i], complexNetworks[i+1]);    
-          printf("\n Distancia entre a rede %d e %d = %f", i, i+1,distance);
+          printf("\n Distance between the network %d and %d = %f", i, i+1,distance);
           distances[i_distance] = distance;
           i_distance = i_distance + 1;
           if(distance > biggerDistance){
@@ -582,9 +599,9 @@ complexNetwork SelectBetterNetworkToFindCommunities(){
       
       plotGraphic();
       
-      printf("\n\n\n A rede %d possui a maior distancia: %f  ", indexMelhorRede,  biggerDistance);
+      printf("\n\n\n The network %d has the largest distance: %f  ", indexMelhorRede,  biggerDistance);
       
-      printf("\n\n\n Escolha o pico que deseja utilizar:  ");
+      printf("\n\n\n Select the network you want to use:  ");
       scanf("%d", &indexMelhorRede);
       betterNetwork = complexNetworks[indexMelhorRede];
       return betterNetwork;
@@ -596,7 +613,7 @@ void plotGraphic(){
     char syscommand[1024];
     strcpy(path,current_path_entrada);
     strcat(path,"mDistanceGraphic.dat");
-    sprintf(syscommand, "start gnuplot -persist -e \"plot '%s' with lines title 'SCANNET - Gr�fico de Dist�ncias';pause -1 'Pressione Enter para sair. . .';\"\"",path);
+    sprintf(syscommand, "start gnuplot -persist -e \"plot '%s' with lines title 'SCANNET - Distances chart';pause -1 'Press enter to exit. . .';\"\"",path);
     system(syscommand);
 
 }
@@ -792,7 +809,7 @@ void processGraphicDendrogram(int nodeWithEdgeRemoved[1][2], complexNetwork *com
         } 
     }
     
-    // ADICIONADO PARA MANTER AS COMUNIDADES COM MENOR N�MERO SEMPRE NA ESQUERDA NO DENDROGRAMA
+    // ADICIONADO PARA MANTER AS COMUNIDADES COM MENOR DIÂMETRO SEMPRE NA ESQUERDA NO DENDROGRAMA
     if(index2 > index){
         for (j = 0; j < index2; j++){
             AuxCommunity[j] = itensOldCommunity[j];
@@ -879,7 +896,7 @@ void processDendrogram(int nodeWithEdgeRemoved[1][2], complexNetwork *complexNet
         } 
     }
     
-    // ADICIONADO PARA MANTER AS COMUNIDADES COM MENOR N�MERO SEMPRE NA ESQUERDA NO DENDROGRAMA
+    // ADICIONADO PARA MANTER AS COMUNIDADES COM MENOR DIÂMETRO SEMPRE NA ESQUERDA NO DENDROGRAMA
     if(index2 > index){
         for (j = 0; j < index2; j++){
             newCommunityItens[j] = itensOldCommunity[j];
@@ -1025,7 +1042,7 @@ void writeLog(int* parcialArestasRemovidas, int* totalArestasRemovidas){
     *parcialArestasRemovidas = *parcialArestasRemovidas + qtdNodeWithEdgeRemoved;
      *totalArestasRemovidas = qtdNodeWithEdgeRemoved + *totalArestasRemovidas;
      if(*parcialArestasRemovidas >= N_ARESTAS){
-        showtimeWithParameter(" Arestas removidas ", *totalArestasRemovidas);
+        showtimeWithParameter(" Edges removed: ", *totalArestasRemovidas);
         *parcialArestasRemovidas = 0;
      }
 }
@@ -1102,7 +1119,7 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
     removedEdges = (edge *)malloc( (sizeSimilarityMatrix * 300) * sizeof(edge));
     
     if(removedEdges == NULL){
-         printf("\n ERRO NA CRIAÇÃO DA LISTA DE ARESTAS. PROBLEMA NA ALOCAÇÃO DE MEMÓRIA. \n");
+         printf("\n ERROR IN CREATING THE EDGES LIST. PROBLEM IN MEMORY ALLOCATION. \n");
          exit(1);
     }
     removedEdges[sizeEdges].V1 = indiceI;
@@ -1134,12 +1151,11 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
                                  break;
                              }
                          }
-                      //   printf("\n teste -1.3.2, finded = %d, soma=%d, v1 = %d, vertex = %d", finded, (sizeVertex-1)+(sizeAux+1), v1, vertex[(sizeVertex-1)+(sizeAux+1)]);
+
                          if(finded == 0){
                              sizeAux++;
                              vertex[(sizeVertex-1)+sizeAux] = v1;
                          }
-                    //     printf("\n teste -1.3.3 | item = %d, v1 = %d, sizeEdges = %d, removedEdges[sizeEdges] = %d", item, v1, sizeEdges,removedEdges[sizeEdges] );
                       
                          if(item < v1){
                               removedEdges[sizeEdges].V1 = item;
@@ -1149,7 +1165,6 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
                               removedEdges[sizeEdges].V2 = item;
                          }
                          sizeEdges++;   
-                      //   printf("\n Size: %d", sizeEdges);
                      } 
                 }
             }
