@@ -55,7 +55,7 @@ The chart is characterized by a series of peaks, where each peak represents a po
 
 > **Note:** To the SCANNET displays the chart with all distances between pairs of neighboring networks is necessary you have installed on your computer GNUPLOT software, available at: http://www.gnuplot.info/. If GNUPLOT have not installed on your computer, the SCANNET display on the screen only distance values.
  
-#### End of Execution
+##### End of Execution
 At the end of the run, the SCANNET generates the critical network, the dendrogram, the color representation of the neighborhood matrix and the ordered proteins each one in a different output file. It is also generated a log file with all the program execution information. The output files can be read by several graphical analysis softwares such as Origin Lab®, Matlab®, GNU Plot, etc.
 
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig7.png" /> </p>
