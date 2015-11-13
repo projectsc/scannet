@@ -96,7 +96,7 @@ void orderSequences(complexNetwork*);
 void saveArrayInFile(char**, char[], int);
 char** createDynamicCharMatrix(int);
 
-// Global vars
+//Global vars
 enum boolean {
     true = 1, false = 0
 };
