@@ -11,12 +11,12 @@
 ## Installation
 
 ##### Generating the Executable File
-To compile  and generate the executable file you must have a C compiler installed on your computer. 
+For compile and generate the executable file you must have a C compiler installed on your computer. 
 * Windows OS  
-We suggest installing the compiler MinGW (Minimalist GNU for Windows) , available at: http://www.mingw.org/
+We suggest installing the compiler MinGW (Minimalist GNU for Windows), available at: http://www.mingw.org/
 
 * Linux OS  
-GCC (GNU Compiler Collection) for Linux or Mac OS, available at: https://gcc.gnu.org/.  
+We suggest installing the compiler GCC (GNU Compiler Collection) for Linux or Mac OS, available at: https://gcc.gnu.org/.  
 
 After installation compiler, is required run the command line below to compile the scannet.c and generate the executable file.
 
