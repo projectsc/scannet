@@ -18,7 +18,7 @@ We suggest installing the compiler MinGW (Minimalist GNU for Windows) , availabl
 * Linux OS  
 GCC (GNU Compiler Collection) for Linux or Mac OS, available at: https://gcc.gnu.org/.  
 
-With the installed compiler, must run the command line below to compile the file scannet.c and generate the executable file.
+After installation compiler, is required run the command line below to compile the scannet.c and generate the executable file.
 
 			gcc -o <EXECUTABLE NAME> scannet.c
 	
@@ -26,21 +26,21 @@ With the installed compiler, must run the command line below to compile the file
     
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig2.png" /> </p>
 			
-To enjoy the full potential of SCANNER we suggest you have installed on your computer GNUPLOT software, available at: http://www.gnuplot.info/	
+For enjoy the full potential of SCANNET, we suggest you install on your computer the GNUPLOT software, available at: http://www.gnuplot.info/.	
 			
 ## How Use 
 
 ##### Running Program	
-To start the program you need only double-click on the generated executable file.
+For start the program you need only double-click on the generated executable file.
 
 ##### Setting Input File  
     
-SCANNET used as input a file (.txt or .dat) containing the similarity matrix between the proteins that will be analyzed. So you must provide the name of the input file. The used input file must be in the same SCANNET run directory.
+SCANNET use as input, a file (.txt or .dat) containing the similarity matrix between the proteins that will be analyzed. So you must provide the name of the input file. The used input file must be in the same SCANNET run directory.
 
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig3.png" /> </p>
 
 ##### Setting Protein Order File
-During the communities identification process, the SCANNET reassembles the proteins of the similarity matrix, changing the initial order these proteins. To facilitate the identification of proteins in the generated output (Dendrogram, Complex Network and Color Matrix), the SCANNET generates an output file with the final order of proteins. If the user wanted has this feature, it's necessary set the file (.csv or .dat or .txt) with the initial protein order. The protein order file is optional, but if used must be in the same SCANNET run directory.
+During the communities identification process, the SCANNET reassembles the proteins of the similarity matrix, changing the initial order these proteins. To facilitate the proteins identification in the generated output (Dendrogram, Complex Network and Color Matrix), the SCANNET generates an output file with the final proteins order. If the user wanted has this feature, it's necessary set the file (.csv or .dat or .txt) with the initial protein order. The protein order file is optional, but if used must be in the same SCANNET run directory.
 
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig4.png" /> </p>
 
@@ -53,10 +53,10 @@ The chart is characterized by a series of peaks, where each peak represents a po
 
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig6.png" /> </p>
 
-> **Note:** To the SCANNET displays the chart with all distances between pairs of neighboring networks is necessary you have installed on your computer GNUPLOT software, available at: http://www.gnuplot.info/. If GNUPLOT have not installed on your computer, the SCANNET display on the screen only distance values.
+> **Note:** For the SCANNET displays the chart with all distances between pairs of neighboring networks is necessary you have installed on your computer GNUPLOT software, available at: http://www.gnuplot.info/.
  
 ##### End of Execution
-At the end of the run, the SCANNET generates the critical network, the dendrogram, the color representation of the neighborhood matrix and the ordered proteins each one in a different output file. It is also generated a log file with all the program execution information. The output files can be read by several graphical analysis softwares such as Origin Lab®, Matlab®, GNU Plot, etc.
+At the end of the run, the SCANNET generates the critical network, the dendrogram, the color representation of the neighborhood matrix and the ordered proteins, each one in a different output file. It also generate a log file with all the information of program execution. The output files can be read by several graphical analysis softwares such as Origin Lab®, Matlab®, GNU Plot, etc.
 
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig7.png" /> </p>
 
@@ -66,11 +66,3 @@ Develop a graphical user interface more intuitive and powerful that present grap
 
 
 [Protein Similarity Networks (PSN)]:http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1001131
-
-
-
-
-
-
-
-
