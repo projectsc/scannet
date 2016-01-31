@@ -140,7 +140,21 @@ FILE *arqLog;
 int main(int argc, char** argv) {
         complexNetwork betterNetwork;
         int option = 1;       
-        
+		
+		printf(" Copyright (C) 2015 Austeclino");
+		printf("\n\n This program is free software: you can redistribute it and/or modify");
+		printf("\n it under the terms of the GNU General Public License as published by");
+		printf("\n the Free Software Foundation, either version 3 of the License, or");
+		printf("\n (at your option) any later version.");
+     	printf("\n\n This program is distributed in the hope that it will be useful,");
+		printf("\n but WITHOUT ANY WARRANTY; without even the implied warranty of");
+		printf("\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
+		printf("\n GNU General Public License for more details.");
+		printf("\n\n You should have received a copy of the GNU General Public License");
+		printf("\n along with this program.  If not, see <http://www.gnu.org/licenses/>.");
+		
+		printf("\n\n\n --------------------------- SCANNET v1.0 ------------------------------ \n\n");
+		
         while (option == 1 || option == 2){
         
             if(option == 1){
@@ -239,10 +253,6 @@ int main(int argc, char** argv) {
             setupOutputNames(networkName, 1, ".csv");
             saveNetwork(betterNetwork.colorsMatrix, networkName);
             
-            //char mDendrogramName[30] = "mDendrogram_";
-            //setupOutputNames(mDendrogramName, 1, ".dat");
-            //saveMatrizInFile(betterNetwork.dendrogramMatrix, mDendrogramName,betterNetwork.qtdOfEdges+2, sizeSimilarityMatrix);
-
             char mDendrogramGraphic[30] = "mDendrogramGraphic_";
             setupOutputNames(mDendrogramGraphic, 1, ".dat");
             saveMatrizInFileFloat(betterNetwork.dendrogramGraphic, mDendrogramGraphic,qtdDendrogramLines+2, sizeSimilarityMatrix+1);
