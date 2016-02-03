@@ -2,7 +2,7 @@
     O SCANNET visa simplificar a utilização do método PSN (Protein Similarity Networks)
 	a partir da unificação dos seus passos.
 	
-    Copyright (C) 2015 Austeclino
+    Copyright (C) 2015 Austeclino Magalhães Barros Júnior
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
         complexNetwork betterNetwork;
         int option = 1;       
 		
-		printf(" Copyright (C) 2015 Austeclino");
+		printf(" Copyright (C) 2015 Austeclino Magalhaes Barros Junior");
 		printf("\n\n This program is free software: you can redistribute it and/or modify");
 		printf("\n it under the terms of the GNU General Public License as published by");
 		printf("\n the Free Software Foundation, either version 3 of the License, or");
@@ -163,21 +163,14 @@ int main(int argc, char** argv) {
                 scanf("%s", filename);
 
                 sizeSimilarityMatrix = countNumberLinesOfFile(filename);
-
-               // -------------- PARAMETROS DE CONFIGURACAO ---------------
-                getcwd(current_path_entrada, 255);
+				getcwd(current_path_entrada, 255);
                 strcat(current_path_entrada, "\\");
-                
-                // ------------------------ CARREGANDO MATRIX DE SIMILARIDADE ---------------------------------
-
                 similarityMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);
                 loadSimilarityMatrix(filename, similarityMatrix);   
                 start_t_TOTAL = getTime();
-  
-                // ------------------------ CARREGANDO LISTA DE SEQUENCIA ---------------------------------
                 optionLoadSequenceFile = 0;
+				
                 while((optionLoadSequenceFile != 1)&&(optionLoadSequenceFile != 2)){
-                 
                     printf("\n\n Want to load the sequences file (1-Yes/2-No):  ");
                     scanf("%d", &optionLoadSequenceFile);
 
@@ -190,7 +183,6 @@ int main(int argc, char** argv) {
                          printf("\n\n Invalid Option  ");
                     }                 
                  }
-                //      ---------------- CRIACAO DAS REDES COMPLEXAS ---------------------------
                 
                 start_t_RC = getTime();  
                 printf("\n\n The complex networks are being created, please wait... \n");
@@ -208,17 +200,15 @@ int main(int argc, char** argv) {
                 fprintf(arqLog,"\n\n ------- Summary execution --------- \n");
             }
 
-            //      ---------------- SELECAO DA REDE CR�?TICA -------------------------------
+
             start_t_Distancia = getTime();
             betterNetwork = SelectBetterNetworkToFindCommunities(arqLog);
             end_t_Distancia = getTime();
             tempo_total_Distancia = end_t_Distancia - start_t_Distancia;
             printf("\n Number of edges: %d ", betterNetwork.qtdOfEdges);
 
-            //      ---------------- PREPARACAO DO NGA -------------------------------
             betterNetwork.colorsMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);      
             betterNetwork.dendrogramMatrix = createDynamicMatrix(betterNetwork.qtdOfEdges+2, sizeSimilarityMatrix);
-            //##
             betterNetwork.dendrogramGraphic = createDynamicMatrixFloat(betterNetwork.qtdOfEdges*2, sizeSimilarityMatrix+1);
             betterNetwork.realIndex = createDynamicArray(sizeSimilarityMatrix);
             betterNetwork.realIndexDendrogramGraphic = createDynamicArray(sizeSimilarityMatrix);
@@ -228,14 +218,11 @@ int main(int argc, char** argv) {
                 betterNetwork.realIndex[i] = i;
                 betterNetwork.realIndexDendrogramGraphic[i] = i;
             }
+			
             copyMatrix(betterNetwork.neighborhoodMatrix, betterNetwork.colorsMatrix);
-
-            //      ---------------- EXECUCAO DO NGA -------------------------------
             printf("\n\n The Girvan-Newman algorithm is running, please wait ...\n\n");
-
             executeNga(betterNetwork);
-            //      ---------------- GERACAO DAS SAIDAS -------------------------------
-                    end_t_TOTAL = getTime();
+            end_t_TOTAL = getTime();
             tempo_total_TOTAL = end_t_TOTAL - start_t_TOTAL;
 
             for (i = 0; i < sizeSimilarityMatrix; i++){ 
@@ -342,24 +329,19 @@ int countNumberLinesOfFile(char nameOfFile[30]){
     int numberLines = 1;
     char chr;
     fileptr = fopen(nameOfFile, "r");
-   //extract character from file and store in chr
     chr = getc(fileptr);
     while (chr != EOF){
-        //Count whenever new line is encountered
         if (chr == '\n'){
             numberLines = numberLines + 1;
         }
-        //take next character from file.
         chr = getc(fileptr);
     }
-    fclose(fileptr); //close file.
+    fclose(fileptr);
 
     return numberLines;
 }
 
 
-// Traz a última coluna(eixo Y) para a primeira coluna, pois o origim considera a primeira 
-// coluna como sendo o eixo Y para plotar o dendrograma. 
 void setupEixoYDendrogram(complexNetwork *complexNetwork, int numberDendrogramLines){         
     int i,j;    
     for (i = 0; i < numberDendrogramLines; i++){ 
@@ -535,7 +517,7 @@ void DestroyDynamicMatrixFloat(float** matrix, int sizeLine){
 void loadSimilarityMatrix(char nameOfFile[30], int** matrix){
     FILE *arqBLAST; 
     char *endLinha; 
-    int size = sizeSimilarityMatrix * 4; // Estimativa do tamanho da linha do arquivo.
+    int size = sizeSimilarityMatrix * 4;
     char linha[size];
 
     char *token = NULL;
@@ -724,7 +706,6 @@ void saveArrayInFile(char** array, char nameOfFile[30], int size){
     }
 
     fclose(arqSequence);
-
     printf("\n\n\n The file %s was successfully saved! \n", nameOfFile);
 }
 
@@ -772,18 +753,11 @@ void createNeighborhoodMatrix(complexNetwork complexNetwork){
     }
 }
 
-// Calcula as distâncias de 'Vi' a todos os outros vértices de um grafo com 'V' vértices e armazena-as em dis[]
 void dijkstra (int Vi, int** adjacencyMatrix, int** neighborhoodMatrix, int maxSize)
 {       
-    // Armazena a distância mínima partindo de um vértice 'i' até todos os outros vértices
-    // dis[j] representa a menor distância de 'i' a 'j'.
     int dis[maxSize];
-
-    // vis[i] informa se o vértice 'i' já foi visitado/analisado ou não (inicialmente nenhum vértice foi)
     char vis[maxSize];
     memset (vis, 0, sizeof (vis));
-
-    // Inicialmente afirmamos que a menor distância encontrada entre Vi e qualquer outro vértice (exceto o próprio Vi) é infinita
     memset (dis, 0x7f, sizeof (dis));
     dis[Vi] = 0;
 
@@ -857,9 +831,7 @@ void plotGraphic(){
     setupOutputNames(mDistanceGraphic, 0, ".dat");
     strcat(path,mDistanceGraphic);
     sprintf(syscommand, "start gnuplot -persist -e \"plot '%s' with lines title 'SCANNET - Distances chart'; set xlabel 'Similarity Value'; set ylabel 'Distance'; set xtics 2; set ytics 0.2; pause -1 'Press enter to exit. . .';\"\"",path);
-
     system(syscommand);
-
 }
 
 float calculateDistance(complexNetwork networkOne, complexNetwork networkTwo){
@@ -1056,7 +1028,6 @@ void processGraphicDendrogram(int nodeWithEdgeRemoved[1][2], complexNetwork *com
         } 
     }
     
-    // ADICIONADO PARA MANTER AS COMUNIDADES COM MENOR DIÂMETRO SEMPRE NA ESQUERDA NO DENDROGRAMA
     if(index2 > index){
         for (j = 0; j < index2; j++){
             AuxCommunity[j] = itensOldCommunity[j];
@@ -1143,7 +1114,6 @@ void processDendrogram(int nodeWithEdgeRemoved[1][2], complexNetwork *complexNet
         } 
     }
     
-    // ADICIONADO PARA MANTER AS COMUNIDADES COM MENOR DIÂMETRO SEMPRE NA ESQUERDA NO DENDROGRAMA
     if(index2 > index){
         for (j = 0; j < index2; j++){
             newCommunityItens[j] = itensOldCommunity[j];
@@ -1208,8 +1178,6 @@ void sortCommunitiesList(complexNetwork *complexNetwork, int level){
     }
 }
 
-
-
 void sortGraphicDendrograma(complexNetwork *complexNetwork){
     int i = (*complexNetwork).numberDendrogramLines;
     int j, l, m, auxIndice, realIndexL, realIndexM = 0;
@@ -1234,9 +1202,6 @@ void sortGraphicDendrograma(complexNetwork *complexNetwork){
 }
 
 
-
-// Esse método é responsável pelas trocas de linhas e colunas das matrizes para 
-// geração da metriz de cores e dendrograma.
 void createColorsMatrix(complexNetwork *complexNetwork){
     int index = 0, index1, index2 = 0, i;
     int value = 0;
@@ -1250,21 +1215,17 @@ void createColorsMatrix(complexNetwork *complexNetwork){
         index1 =(*complexNetwork).realIndex[index];
         if(index1 != index){       
             
-            // Procura onde está a coluna real referente a coluna index1. 
-            // (considere que trocas estão sendo feitas por isso essa necessidade)
             index1 = findRealIndex(arrayToSort, index1);
             value = arrayToSort[index1];
             arrayToSort[index1] = arrayToSort[index];
             arrayToSort[index] = value;
             
-            // troca colunas
             for (index2 = 0; index2 < sizeSimilarityMatrix; index2++){              
                 value = (*complexNetwork).colorsMatrix[index2][index1];
                 (*complexNetwork).colorsMatrix[index2][index1] = (*complexNetwork).colorsMatrix[index2][index];
                 (*complexNetwork).colorsMatrix[index2][index] = value;
             }
 
-            // troca linhas
             for (index2 = 0; index2 < sizeSimilarityMatrix; index2++){              
                 value = (*complexNetwork).colorsMatrix[index1][index2];
                 (*complexNetwork).colorsMatrix[index1][index2] = (*complexNetwork).colorsMatrix[index][index2];
@@ -1398,8 +1359,7 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
     removedEdges[sizeEdges].V1 = indiceI;
     removedEdges[sizeEdges].V2 = indiceJ;
     sizeEdges++;
-    
-    // IDENTIFICA OS VERTICES QUE TIVERAM SUAS DISTANCIAS AFETADAS COM A REMOÇÃO.     
+       
     for (d = 1; d < diameter; d++){
         sizeAux = 0;
         for (i = 0; i < sizeVertex; i++){ 
@@ -1445,7 +1405,6 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
         sizeVertex = sizeVertex + sizeAux;
     }   
 
-    // CALCULA A NOVA DISTANCIA ENTRE OS VERTICES AFETADOS.
     for (d = 2; d <= (2*diameter); d++){
         pathSize = 0;
         for (i = 0; i < sizeEdges; i++){ 
@@ -1471,7 +1430,7 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
                 }             
             }
         }
-        // Todos os caminhos já foram recalculados.
+
         if(pathSize == 0){
             break;
         }
