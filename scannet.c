@@ -1350,7 +1350,7 @@ void adjustNeighborhoodMatrix(int nodeWithEdgeRemoved[1][2], int** adjacencyMatr
     vertex[sizeVertex] = indiceJ;
     sizeVertex++;
 
-    removedEdges = (edge *)malloc( (sizeSimilarityMatrix * 300) * sizeof(edge));
+    removedEdges = (edge *)malloc( (sizeSimilarityMatrix * 500) * sizeof(edge));
     
     if(removedEdges == NULL){
          printf("\n ERROR IN CREATING THE EDGES LIST. PROBLEM IN MEMORY ALLOCATION. \n");
