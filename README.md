@@ -28,9 +28,9 @@ After installation compiler, is required run the command line below to compile t
 			
 For enjoy the full potential of SCANNET, we suggest you install on your computer the GNUPLOT software, available at: http://www.gnuplot.info/.	
 			
-## How Use 
+## How to Use 
 
-##### Running Program	
+##### Running
 For start the program you need only double-click on the generated executable file.
 
 ##### Setting Input File  
