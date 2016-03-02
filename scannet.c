@@ -164,7 +164,13 @@ int main(int argc, char** argv) {
 
                 sizeSimilarityMatrix = countNumberLinesOfFile(filename);
 				getcwd(current_path_entrada, 255);
-                strcat(current_path_entrada, "\\");
+               
+                #ifdef WINDOWS
+			strcat(current_path_entrada, "\\");
+		#else
+			strcat(current_path_entrada, "/");
+		#endif
+				
                 similarityMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);
                 loadSimilarityMatrix(filename, similarityMatrix);   
                 start_t_TOTAL = getTime();
