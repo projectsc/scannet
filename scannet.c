@@ -166,10 +166,10 @@ int main(int argc, char** argv) {
 				getcwd(current_path_entrada, 255);
                
                 #ifdef WINDOWS
-			strcat(current_path_entrada, "\\");
-		#else
-			strcat(current_path_entrada, "/");
-		#endif
+					strcat(current_path_entrada, "\\");
+				#else
+					strcat(current_path_entrada, "/");
+				#endif
 				
                 similarityMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);
                 loadSimilarityMatrix(filename, similarityMatrix);   
