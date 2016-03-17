@@ -177,11 +177,11 @@ int main(int argc, char** argv) {
                 optionLoadSequenceFile = 0;
 				
                 while((optionLoadSequenceFile != 1)&&(optionLoadSequenceFile != 2)){
-                    printf("\n\n Want to load the sequences file (1-Yes/2-No):  ");
+                    printf("\n\n Do you want to load the initial order of proteins (1-Yes/2-No):  ");
                     scanf("%d", &optionLoadSequenceFile);
 
                     if(optionLoadSequenceFile == 1){
-                         printf("\n\n Enter the sequence file name (Ex: startSequence.csv):  ");
+                         printf("\n\n Enter the order of protein file name (Ex: initialOrder.csv):  ");
                          scanf("%s", sequenceFilename);
                          sequenceArray = createDynamicCharMatrix(sizeSimilarityMatrix);
                          loadSequenceList(sequenceFilename, sequenceArray);   
@@ -294,7 +294,7 @@ void saveNetwork(int** matrix , char networkName[30]){
        for (i = 0; i < sizeSimilarityMatrix; i++){ 
         for(j = (i+1); j < sizeSimilarityMatrix; j++){
            if(matrix[i][j] == 1){
-               fprintf(arqLog,"%d;%d;undirect\n",i+1,j+1);
+               fprintf(arqLog,"%d;%d;undirected\n",i+1,j+1);
            } 
         } 
     }
@@ -326,7 +326,6 @@ void setupOutputNames(char * nameOfFile, int concatNetwork, char format[10] ){
         sprintf(index, "%d", indexMelhorRede);
         strcat(nameOfFile, index);
     }
-   
     strcat(nameOfFile, format);
 }
 
@@ -830,13 +829,20 @@ complexNetwork SelectBetterNetworkToFindCommunities(FILE *arqLog){
 
 
 void plotGraphic(){
+
     char path[1024];
     char syscommand[1024];
     strcpy(path,current_path_entrada);
-    char mDistanceGraphic[30] = "mDistanceGraphic_";
+    char mDistanceGraphic[100] = "mDistanceGraphic_";
     setupOutputNames(mDistanceGraphic, 0, ".dat");
     strcat(path,mDistanceGraphic);
-    sprintf(syscommand, "start gnuplot -persist -e \"plot '%s' with lines title 'SCANNET - Distances chart'; set xlabel 'Similarity Value'; set ylabel 'Distance'; set xtics 2; set ytics 0.2; pause -1 'Press enter to exit. . .';\"\"",path);
+	
+    #ifdef WIN32
+        sprintf(syscommand, "start gnuplot -persist -e \"plot '%s' with lines title 'SCANNET - Distances chart'; set xlabel 'Similarity Value'; set ylabel 'Distance'; set xtics 2; set ytics 0.2; pause -1 'Press enter to exit. . .';\"\"",path);
+	#else
+		sprintf(syscommand, "gnuplot -p -e \"plot '%s' with lines title 'SCANNET - Distances chart';set xlabel 'Similarity Value'; set ylabel 'Distance'; set xtics 2; set ytics 0.2;\"",path);
+	#endif
+	
     system(syscommand);
 }
 
