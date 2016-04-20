@@ -264,7 +264,7 @@ int main(int argc, char** argv) {
             fprintf(arqLog,"\n Time spent in generating the color matrix (ms): %.5lf", tempo_total_MC);
             fprintf(arqLog,"\n Running time (ms): %.5lf \n", tempo_total_TOTAL);
             fprintf(arqLog,"\n --------------------------------------------------- \n\n\n");
-            
+            fclose(arqLog);
             
             printf("\n\n What do you want to do now?  ");
             printf("\n\n 1 - Analyze new sequence  ");
@@ -286,20 +286,21 @@ int main(int argc, char** argv) {
 void saveNetwork(int** matrix , char networkName[30]){
       char path[1000];
       int i, j;
+	  FILE *arqNetwork;
       strcpy(path,current_path_entrada);
       strcat(path,networkName);
-      arqLog = fopen(path, "wt");
-      fprintf(arqLog,"source;target;type\n");
+      arqNetwork = fopen(path, "wt");
+      fprintf(arqNetwork,"source;target;type\n");
       
        for (i = 0; i < sizeSimilarityMatrix; i++){ 
         for(j = (i+1); j < sizeSimilarityMatrix; j++){
            if(matrix[i][j] == 1){
-               fprintf(arqLog,"%d;%d;undirected\n",i+1,j+1);
+               fprintf(arqNetwork,"%d;%d;undirected\n",i+1,j+1);
            } 
         } 
     }
 
-    fclose(arqLog);
+    fclose(arqNetwork);
     printf("\n\n The file %s was successfully saved! \n", networkName);
 }
 
@@ -332,20 +333,23 @@ void setupOutputNames(char * nameOfFile, int concatNetwork, char format[10] ){
 int countNumberLinesOfFile(char nameOfFile[30]){   
     FILE *fileptr;
     int numberLines = 1;
-    char chr;
+    int chr;
+	int chrBefore;
     fileptr = fopen(nameOfFile, "r");
     chr = getc(fileptr);
-    while (chr != EOF){
-        if (chr == '\n'){
+    while ((chr != EOF) && (chr != -1)){
+        if (chr == '\n' && chrBefore != '\n'){
             numberLines = numberLines + 1;
         }
+		chrBefore = chr;
         chr = getc(fileptr);
     }
+	if (chrBefore == '\n'){
+		numberLines = numberLines - 1;
+    }
     fclose(fileptr);
-
     return numberLines;
 }
-
 
 void setupEixoYDendrogram(complexNetwork *complexNetwork, int numberDendrogramLines){         
     int i,j;    
@@ -789,7 +793,7 @@ void dijkstra (int Vi, int** adjacencyMatrix, int** neighborhoodMatrix, int maxS
     }
 }
 
-complexNetwork SelectBetterNetworkToFindCommunities(FILE *arqLog){
+complexNetwork SelectBetterNetworkToFindCommunities(FILE* arqLog){
       float distance = 0;
       float biggerDistance = 0;
       int i = 0;
