@@ -68,7 +68,7 @@ void clearMatrix(int**);
 void clearMatrixBySize(int**, int );
 int isThereEdge(int**);
 void calculateBetweenness(int, complexNetwork, float**);
-void removeEdgesWithBiggerBetweenness(int[][2], float**, int**, int**);
+void removeEdgesWithBiggerBetweenness(int[][2], float**, int**);
 void processDendrogram(int[][2],complexNetwork*, int**);
 void processGraphicDendrogram(int[][2],complexNetwork*, int**);
 void startDendrogram(complexNetwork*);
@@ -206,13 +206,15 @@ int main(int argc, char** argv) {
                 fprintf(arqLog,"\n\n ------- Summary execution --------- \n");
             }
 
-
-            start_t_Distancia = getTime();
+		    start_t_Distancia = getTime();
             betterNetwork = SelectBetterNetworkToFindCommunities(arqLog);
             end_t_Distancia = getTime();
             tempo_total_Distancia = end_t_Distancia - start_t_Distancia;
             printf("\n Number of edges: %d ", betterNetwork.qtdOfEdges);
 
+			int** neighborhoodMatrixCopy = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix); 
+			copyMatrix(betterNetwork.neighborhoodMatrix, neighborhoodMatrixCopy);
+			
             betterNetwork.colorsMatrix = createDynamicMatrix(sizeSimilarityMatrix, sizeSimilarityMatrix);      
             betterNetwork.dendrogramMatrix = createDynamicMatrix(betterNetwork.qtdOfEdges+2, sizeSimilarityMatrix);
             betterNetwork.dendrogramGraphic = createDynamicMatrixFloat(betterNetwork.qtdOfEdges*2, sizeSimilarityMatrix+1);
@@ -224,6 +226,10 @@ int main(int argc, char** argv) {
                 betterNetwork.realIndex[i] = i;
                 betterNetwork.realIndexDendrogramGraphic[i] = i;
             }
+			
+			char networkName[30] = "network_";
+            setupOutputNames(networkName, 1, ".csv");
+            saveNetwork(betterNetwork.neighborhoodMatrix, networkName);
 			
             copyMatrix(betterNetwork.neighborhoodMatrix, betterNetwork.colorsMatrix);
             printf("\n\n The Girvan-Newman algorithm is running, please wait ...\n\n");
@@ -242,10 +248,6 @@ int main(int argc, char** argv) {
             setupOutputNames(mColorName, 1, ".dat");
             saveMatrizInFile(betterNetwork.colorsMatrix, mColorName, sizeSimilarityMatrix, sizeSimilarityMatrix );
 
-            char networkName[30] = "network_";
-            setupOutputNames(networkName, 1, ".csv");
-            saveNetwork(betterNetwork.colorsMatrix, networkName);
-            
             char mDendrogramGraphic[30] = "mDendrogramGraphic_";
             setupOutputNames(mDendrogramGraphic, 1, ".dat");
             saveMatrizInFileFloat(betterNetwork.dendrogramGraphic, mDendrogramGraphic,qtdDendrogramLines+2, sizeSimilarityMatrix+1);
@@ -273,7 +275,9 @@ int main(int argc, char** argv) {
             scanf("%d", &option);
             if(option == 1 || option == 3){
                  fclose(arqLog);
-            }
+            }else{
+				copyMatrix(neighborhoodMatrixCopy, betterNetwork.neighborhoodMatrix);
+			}
             
         } 
         free(sequenceArray);
@@ -900,7 +904,7 @@ void executeNga(complexNetwork complexNetwork){
         int nodeWithEdgeRemoved[i][2];
         qtdNodeWithEdgeRemoved = 0;
         copyMatrix(complexNetwork.neighborhoodMatrix ,neighborhoodMatrixPrevious);
-        removeEdgesWithBiggerBetweenness(nodeWithEdgeRemoved, betweennessMatrix, complexNetwork.adjacencyMatrix, complexNetwork.neighborhoodMatrix);  
+        removeEdgesWithBiggerBetweenness(nodeWithEdgeRemoved, betweennessMatrix, complexNetwork.adjacencyMatrix);  
         complexNetwork.numberRemovedEdges++;  
         adjustNeighborhoodMatrix(nodeWithEdgeRemoved, complexNetwork.adjacencyMatrix, complexNetwork.neighborhoodMatrix, diameter);
         processDendrogram(nodeWithEdgeRemoved, &complexNetwork, neighborhoodMatrixPrevious);  
@@ -1314,7 +1318,7 @@ int isThereEdge(int** adjacencyMatrix){
 }
 
 
-void removeEdgesWithBiggerBetweenness(int nodeWithEdgeRemoved[1][2], float** betweennessMatrix, int** adjacencyMatrix, int** neighborhoodMatrix){
+void removeEdgesWithBiggerBetweenness(int nodeWithEdgeRemoved[1][2], float** betweennessMatrix, int** adjacencyMatrix){
     int i,j;
     float biggerValue = 0;
     int already[sizeSimilarityMatrix*100][2];
