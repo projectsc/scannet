@@ -266,7 +266,6 @@ int main(int argc, char** argv) {
             fprintf(arqLog,"\n Time spent in generating the color matrix (ms): %.5lf", tempo_total_MC);
             fprintf(arqLog,"\n Running time (ms): %.5lf \n", tempo_total_TOTAL);
             fprintf(arqLog,"\n --------------------------------------------------- \n\n\n");
-            fclose(arqLog);
             
             printf("\n\n What do you want to do now?  ");
             printf("\n\n 1 - Analyze new sequence  ");
