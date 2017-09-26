@@ -22,7 +22,7 @@ After installation compiler, is required run the command line below to compile t
 
 			gcc -o <EXECUTABLE NAME> scannet.c
 	
-<p align="center"> <img src="https://drive.google.com/file/d/0B8lO21f6wqiRWUZtVHhUOURSSmM/view" /> </p>
+<p align="center"> <img src="https://drive.google.com/file/d/0B8lO21f6wqiROUJNemw4aXcxb2c/view" /> </p>
     
 <p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig2.png" /> </p>
 			
