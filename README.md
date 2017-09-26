@@ -22,9 +22,9 @@ After installation compiler, is required run the command line below to compile t
 
 			gcc -o <EXECUTABLE NAME> scannet.c
 	
-<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Fig1.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig1.png" /> </p>
     
-<p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig2.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig2.png" /> </p>
 			
 For enjoy the full potential of SCANNET, we suggest you install on your computer the GNUPLOT software, available at: http://www.gnuplot.info/.	
 			
@@ -36,28 +36,28 @@ For enjoy the full potential of SCANNET, we suggest you install on your computer
     
 SCANNET use as input, a file (.txt or .dat) containing the similarity matrix between the proteins that will be analyzed. So you must provide the name of the input file. The used input file must be in the same SCANNET run directory.
 
-<p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig3.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig3.png" /> </p>
 
 ##### Setting Protein Order File
 During the communities identification process, the SCANNET reassembles the proteins of the similarity matrix, changing the initial order these proteins. To facilitate the proteins identification in the generated output (Dendrogram, Complex Network and Color Matrix), the SCANNET generates an output file with the final proteins order. If the user wanted has this feature, it's necessary set the file (.csv or .dat or .txt) with the initial protein order. The protein order file is optional, but if used must be in the same SCANNET run directory.
 
-<p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig4.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig4.png" /> </p>
 
 ##### Select Similarity Value
 The NSA method assumes that a set of 101 networks is generated from the dataset, each one for a specific threshold of similarity S in the range [0,100]. Afterwards, it calculates the distance between all pairs of subsequent networks in the network set, in order to select the similarity value that best represents the communities in the dataset. Such network is generally the one with the largest distance from its immediately subsequent network. In some cases, more than one similarity value could be selected. To facilitate the work of selecting the best similarity value, SCANNET displays a chart with all distances between pairs of neighboring networks and prompts the user to select the similarity value on which he will continue the analytical process.
 
-<p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig5.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig5.png" /> </p>
 	
 The chart is characterized by a series of peaks, where each peak represents a point at which the obtained networks has greater chances of suffer important alterations topological, or to be divided in new communities. After the analysis of the graph the user can select the similarity value to be analyzed.		
 
-<p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig6.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig6.png" /> </p>
 
 > **Note:** For the SCANNET displays the chart with all distances between pairs of neighboring networks is necessary you have installed on your computer GNUPLOT software, available at: http://www.gnuplot.info/.
  
 ##### End of Execution
 At the end of the run, the SCANNET generates the critical network, the dendrogram, the color representation of the neighborhood matrix and the ordered proteins, each one in a different output file. It also generate a log file with all the information of program execution. The output files can be read by several graphical analysis softwares such as Origin Lab®, Matlab®, GNU Plot, etc.
 
-<p align="center"> <img src="https://dl.dropboxusercontent.com/u/20113863/Fig7.png" /> </p>
+<p align="center"> <img src="https://github.com/projectsn/scannet/blob/master/Imagens/Fig7.png" /> </p>
 
 ## Next Steps
 	
